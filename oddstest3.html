@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fanduel Sportsbook Soccer Fixtures</title>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Make the API request
+      fetch('https://api.the-odds-api.com/v4/sports/upcoming/odds/?regions=us&markets=total&sports=soccer&bookmakers=fanduel&apiKey=5f5aa3dc00442c6f473210f6da7fee43')
+        .then(response => response.json())
+        .then(data => {
+          // Process the API response and display the data
+          const fixtures = data.data;
+          const tableBody = document.querySelector("#fixturesTable tbody");
+          
+          fixtures.forEach(fixture => {
+            const row = document.createElement("tr");
+            
+            const homeTeamCell = document.createElement("td");
+            homeTeamCell.textContent = fixture.home_team;
+            row.appendChild(homeTeamCell);
+            
+            const awayTeamCell = document.createElement("td");
+            awayTeamCell.textContent = fixture.away_team;
+            row.appendChild(awayTeamCell);
+            
+            const oddsCell = document.createElement("td");
+            const odds = fixture.sites[0].odds.total.points['6.5'].odds_decimal;
+            oddsCell.textContent = odds;
+            row.appendChild(oddsCell);
+            
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    });
+  </script>
+</head>
+<body>
+  <h1>Fanduel Sportsbook Soccer Fixtures</h1>
+  <table id="fixturesTable">
+    <thead>
+      <tr>
+        <th>Home Team</th>
+        <th>Away Team</th>
+        <th>Odds (Total Goals &lt; 6.5)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Table rows will be dynamically generated using JavaScript -->
+    </tbody>
+  </table>
+</body>
+</html>
